@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Taraa 🐬</title>
+    <style>
+        :root { 
+            --pink: #ff758c; 
+            --blue: #00d2ff; 
+            --dark-blue: #005f73;
+            --soft-white: #fdfcfc;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background: var(--soft-white);
+            /* Heart Background Pattern */
+            background-image: radial-gradient(#ff758c 1px, transparent 1px), radial-gradient(#00d2ff 1px, transparent 1px);
+            background-size: 40px 40px;
+            background-position: 0 0, 20px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 500px;
+            width: 90%;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 30px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+            border: 4px solid var(--blue);
+            text-align: center;
+            position: relative;
+        }
+
+        h1, h2 { color: var(--dark-blue); }
+        p { line-height: 1.6; color: #444; }
+
+        /* Comic Panel Styling */
+        .comic-panel {
+            border: 4px solid #333;
+            padding: 15px;
+            background: white;
+            margin-bottom: 20px;
+            transform: rotate(-1deg);
+            box-shadow: 8px 8px 0px #333;
+        }
+
+        .comic-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-bottom: 3px solid #333;
+            margin-bottom: 10px;
+        }
+
+        .comic-caption {
+            font-family: 'Comic Sans MS', cursive;
+            font-size: 1rem;
+            color: #222;
+        }
+
+        /* Buttons */
+        button {
+            padding: 15px 30px;
+            font-size: 18px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-weight: bold;
+            margin: 10px;
+        }
+
+        .btn-blue { background: var(--blue); color: white; }
+        .btn-pink { background: var(--pink); color: white; }
+        
+        #btn-yes { background: #2ecc71; color: white; z-index: 1000; }
+        #btn-no { background: #e74c3c; color: white; position: absolute; }
+
+        .hidden { display: none; }
+
+        .cat-game { font-size: 50px; cursor: pointer; transition: transform 0.2s; }
+        .cat-game:active { transform: scale(1.3); }
+    </style>
+</head>
+<body>
+
+    <div id="sec1" class="container">
+        <h1 style="color: var(--pink);">Hi, Taraa 🐬</h1>
+        <p>Before we talk, let's feed the naughty kitties!</p>
+        <div class="cat-game" onclick="feedCat()">🐱</div>
+        <p id="cat-status">The cats are waiting for a "Meow"...</p>
+        <div style="width:100%; background:#eee; height:10px; border-radius:5px;">
+            <div id="bar" style="width:0%; height:100%; background:var(--blue); border-radius:5px;"></div>
+        </div>
+    </div>
+
+    <div id="sec2" class="container hidden">
+        <div id="comic-display">
+            </div>
+        <button class="btn-blue" onclick="nextPanel()">Next Chapter 📖</button>
+    </div>
+
+    <div id="sec3" class="container hidden" style="min-height: 450px;">
+        <h1 style="color: var(--pink);">The Big Question</h1>
+        <p>I am not your past, Taraa. I am your present and I want to be your future. I don't want to fight <i>with</i> you, I want to fight <i>for</i> you.</p>
+        <h2>Will you be my Valentine? 🐬💖</h2>
+        
+        <div style="margin-top: 50px; position: relative; height: 100px;">
+            <button id="btn-yes" onclick="finish()">YES</button>
+            <button id="btn-no" onmouseover="dodge()" onclick="dodge()">NO</button>
+        </div>
+    </div>
+
+    <script>
+        // Game Logic
+        let clicks = 0;
+        function feedCat() {
+            clicks++;
+            document.getElementById('bar').style.width = (clicks * 20) + '%';
+            if(clicks === 3) document.getElementById('cat-status').innerText = "Meow! Meow! Tell me more naughty things!";
+            if(clicks >= 5) showSec(2);
+        }
+
+        // Comic Data
+        const panels = [
+            {
+                img: "https://images.unsplash.com/photo-1516589174184-c6852651428a?auto=format&fit=crop&w=500",
+                txt: "We used to fight so much because we just wanted more of each other's time. It was messy, but it was because we cared."
+            },
+            {
+                img: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=500",
+                txt: "Then came the late-night calls and that New Year apology. Everything shifted. We weren't just 'fighting' anymore... we were bonding."
+            },
+            {
+                img: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=500",
+                txt: "Listening to you say 'Meow Meow' to your cats while we are on the call... that's when I knew. You're my favorite person."
+            },
+            {
+                img: "https://images.unsplash.com/photo-1582133637202-fca476c2d1fe?auto=format&fit=crop&w=500",
+                txt: "I know he broke your trust. But I am not him. I am the guy who stays, even after the fights. Always."
+            }
+        ];
+
+        let currentP = 0;
+        function nextPanel() {
+            if(currentP < panels.length) {
+                document.getElementById('comic-display').innerHTML = `
+                    <div class="comic-panel">
+                        <img src="${panels[currentP].img}" class="comic-img">
+                        <div class="comic-caption">${panels[currentP].txt}</div>
+                    </div>
+                `;
+                currentP++;
+            } else {
+                showSec(3);
+            }
+        }
+        nextPanel();
+
+        function showSec(n) {
+            document.querySelectorAll('.container').forEach(c => c.classList.add('hidden'));
+            document.getElementById('sec' + n).classList.remove('hidden');
+        }
+
+        // The No Button Dodge
+        function dodge() {
+            const btn = document.getElementById('btn-no');
+            const x = Math.random() * (window.innerWidth - btn.offsetWidth - 30);
+            const y = Math.random() * (window.innerHeight - btn.offsetHeight - 30);
+            btn.style.left = x + 'px';
+            btn.style.top = y + 'px';
+            btn.style.position = 'fixed';
+        }
+
+        function finish() {
+            document.getElementById('sec3').innerHTML = `
+                <h1 style="color: var(--pink);">YES! ❤️</h1>
+                <p style="font-size: 50px;">🐬🍲🐱</p>
+                <h2>I love you, Taraa!</h2>
+                <p>Let's go get some Pani Puri and celebrate!</p>
+            `;
+            setInterval(createHeart, 300);
+        }
+
+        function createHeart() {
+            const h = document.createElement('div');
+            h.innerHTML = '❤️';
+            h.style.position = 'fixed';
+            h.style.left = Math.random() * 100 + 'vw';
+            h.style.top = '100vh';
+            h.style.transition = '4s';
+            h.style.fontSize = '24px';
+            document.body.appendChild(h);
+            setTimeout(() => {
+                h.style.transform = 'translateY(-110vh)';
+                h.style.opacity = '0';
+            }, 100);
+        }
+    </script>
+</body>
+</html>
